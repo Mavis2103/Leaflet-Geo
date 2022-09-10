@@ -1,0 +1,35 @@
+{
+  "name": "basic-usage-with-react-leaflet-v3",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.tsx",
+  "dependencies": {
+    "d3": "^7.6.1",
+    "leaflet": "1.8.0",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "react-leaflet": "4.0.0",
+    "react-leaflet-google-layer": "2.0.6",
+    "react-scripts": "^5.0.1",
+    "topojson-client": "^3.1.0",
+    "topojson-server": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.0.0",
+    "@types/react-dom": "18.0.0",
+    "typescript": "3.3.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

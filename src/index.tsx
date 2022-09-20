@@ -1,7 +1,7 @@
 import * as React from 'react';
 import L, { CRS, LatLngBounds, Icon } from 'leaflet';
 import mapData from './pangea.json';
-import vector from './1M.json';
+import vector from './Clip1M.json';
 import { createRoot } from 'react-dom/client';
 import { GeoJSON, MapContainer, Polygon, useMap, useMapEvents, TileLayer, Marker, Popup, ImageOverlay, useMapEvent } from 'react-leaflet';
 import Back from './Back';
@@ -71,7 +71,7 @@ function App() {
 
   const neighbor = React.useMemo(() => {
     if (currentPoint) {
-      const k = 5;
+      const k = 3;
       const n = (k * (2 * 8 + (k - 1) * 8)) / 2 + 1;
       const x = currentPoint;
 
@@ -80,7 +80,7 @@ function App() {
       Array(k)
         .fill(0)
         .forEach((_, k_i) => {
-          const x = Math.sqrt(n) * (k_i + 1);
+          const x = 31 * (k_i + 1);
           const y = k_i + 1;
           axis_x.push(x, -x);
           axis_y.push(y, -y);
@@ -97,16 +97,16 @@ function App() {
   }, [currentPoint]);
 
   const onClick = id => e => {
+    console.log(id);
     if (isFarmMode) {
       setCurrentPoint(id);
     }
   };
-  const owner = [301, 190, 191, 192, 269, 230, 233, 297, 298, 302, 304, 303];
+  const owner = [301, 190, 191, 192, 269, 230, 233, 297, 298, 302, 304, 303, 271, 222, 333];
   const myLand = [296, 298, 299];
   const featureNearest = React.useCallback(
-    fid => {
-      // return isFarmMode ? (neighbor?.includes(fid) ? (owner.includes(fid) ? '#fff' : '#002E5E') : '#002E5E') : '#002E5E';
-      return isFarmMode ? (owner.includes(fid) ? '#ffdd00' : '#002E5E') : '#002E5E';
+    id => {
+      return isFarmMode ? (neighbor?.concat(currentPoint)?.includes(id) ? (owner.includes(id) ? '#ffdd00' : '#002E5E') : '#002E5E') : '#002E5E';
     },
     [currentPoint]
   );
@@ -118,16 +118,16 @@ function App() {
           const latlng = v.geometry.coordinates[0][0].map(item => [item[1], item[0]]);
           return (
             <Polygon
-              key={v.properties.fid}
+              key={v.properties.id}
               positions={latlng}
-              eventHandlers={{ mouseover: onClick(v.properties.fid) }}
+              eventHandlers={{ mouseover: onClick(v.properties.id) }}
               pathOptions={{
-                fillColor: featureNearest(v.properties.fid),
-                fillOpacity: myLand.includes(v.properties.fid) ? 0 : 1,
+                fillColor: featureNearest(v.properties.id),
+                fillOpacity: myLand.includes(v.properties.id) ? 0 : 1,
                 weight: 0,
                 opacity: 0
               }}>
-              {myLand.includes(v.properties.fid) && <Item {...{ latlng, isFarmMode }} />}
+              {myLand.includes(v.properties.id) && <Item {...{ latlng, isFarmMode }} />}
             </Polygon>
           );
         })}

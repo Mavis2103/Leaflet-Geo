@@ -9,6 +9,7 @@ import * as topojson from 'topojson-client';
 import Footer from './footer';
 import './styles.css';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
+import Tools from './Tools';
 
 // const myIcon = new Icon({
 //   iconUrl: marker,
@@ -37,7 +38,7 @@ const useData = json => {
 };
 function App() {
   const [isFarmMode, setIsFarmMode] = React.useState(false);
-  const [currentPoint, setCurrentPoint] = React.useState();
+  const [currentPoint, setCurrentPoint] = React.useState(299);
   const map = useMap();
   const mapEvents = useMapEvents({
     zoomend: e => {
@@ -97,18 +98,19 @@ function App() {
   }, [currentPoint]);
 
   const onClick = id => e => {
-    console.log(id);
     if (isFarmMode) {
-      setCurrentPoint(id);
+      // setCurrentPoint(id);
     }
   };
-  const owner = [301, 190, 191, 192, 269, 230, 233, 297, 298, 302, 304, 303, 271, 222, 333];
-  const myLand = [296, 298, 299];
+  console.log(vector);
+
+  const owner = [301, 190, 191, 192, 269, 230, 233, 297, 298, 302, 304, 303, 271, 222];
+  const myLand = [298, 299, 330];
   const featureNearest = React.useCallback(
     id => {
-      return isFarmMode ? (neighbor?.concat(currentPoint)?.includes(id) ? (owner.includes(id) ? '#ffdd00' : '#002E5E') : '#002E5E') : '#002E5E';
+      return isFarmMode ? (neighbor?.concat(currentPoint)?.includes(id) ? (owner.includes(id) ? '#48c3c8' : '#002E5E') : '#002E5E') : '#002E5E';
     },
-    [currentPoint]
+    [currentPoint, isFarmMode]
   );
   return (
     <>
@@ -116,6 +118,11 @@ function App() {
       <MarkerClusterGroup>
         {vector?.features.map(v => {
           const latlng = v.geometry.coordinates[0][0].map(item => [item[1], item[0]]);
+          if (v.properties.id === 299) {
+            console.log('====================================');
+            console.log(v.geometry.coordinates[0][0]);
+            console.log('====================================');
+          }
           return (
             <Polygon
               key={v.properties.id}
@@ -153,6 +160,9 @@ const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
   <MapContainer style={{ height: '100vh', width: '100%' }} zoom={0} maxZoom={4} center={[1, 1]} crs={CRS.EPSG3857}>
+    <Tools />
+    <Footer />
+    <Back />
     <App />
   </MapContainer>
 );
